@@ -32,7 +32,7 @@ http.createServer(function (req, res) {
     } else {
         methodNotAllowed(res);
     }
-}).listen(8080);
+}).listen(8888);
 
 process.on('uncaughtException', function(err) {
     console.error("UNCAUGHT EXCEPTION...");
