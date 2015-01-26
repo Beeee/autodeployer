@@ -25,7 +25,7 @@ module.exports = function (callback) {
             repository = repo;
 
             return repository.fetchAll({
-                credentials: createCred()
+                credentials: createCred
             }, true);
         })
         // Now that we're finished fetching, go ahead and merge our local branch
