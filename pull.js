@@ -3,8 +3,19 @@ var nodegit = require("nodegit");
 var path = require("path");
 
 var repoDir = "../situp-backend-central/";
+var sshPublicKey = path.resolve("./id_rsa.pub");
+var sshPrivateKey = path.resolve("./id_rsa");
 
 var repository;
+
+function createCred() {
+    return nodegit.Cred.sshKeyNew(
+        "username",
+        sshPublicKey,
+        sshPrivateKey,
+        ""
+    );
+}
 
 
 module.exports = function (callback) {
@@ -15,7 +26,7 @@ module.exports = function (callback) {
 
             return repository.fetchAll({
                 credentials: function (url, userName) {
-                    return nodegit.Cred.sshKeyFromAgent(userName);
+                    return createCred();
                 }
             }, true);
         })
