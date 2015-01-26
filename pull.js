@@ -2,12 +2,12 @@
 var nodegit = require("nodegit");
 var path = require("path");
 
-var repoDir = "../../test";
+var repoDir = "../situp-backend-central/";
 
 var repository;
 
 
-module.exports = function () {
+module.exports = function (callback) {
 // Open a repository that needs to be fetched and fast-forwarded
     nodegit.Repository.open(path.resolve(__dirname, repoDir))
         .then(function (repo) {
@@ -25,7 +25,7 @@ module.exports = function () {
             repository.mergeBranches("master", "origin/master");
         })
         .done(function () {
-            console.log("Done!");
+            callback();
         });
 
-}
+};
