@@ -10,7 +10,7 @@ var repository;
 
 function createCred() {
     return nodegit.Cred.sshKeyNew(
-        "username",
+        "git",
         sshPublicKey,
         sshPrivateKey,
         ""
@@ -25,15 +25,16 @@ module.exports = function (callback) {
             repository = repo;
 
             return repository.fetchAll({
-                credentials: function (url, userName) {
-                    return createCred();
-                }
+                credentials: createCred()
             }, true);
         })
         // Now that we're finished fetching, go ahead and merge our local branch
         // with the new one
         .then(function () {
             repository.mergeBranches("master", "origin/master");
+        })
+        .then(function () {
+            nodegit.Checkout.head(repository);
         })
         .done(function () {
             callback();
