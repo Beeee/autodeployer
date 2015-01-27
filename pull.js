@@ -31,7 +31,7 @@ module.exports = function (callback) {
         // Now that we're finished fetching, go ahead and merge our local branch
         // with the new one
         .then(function () {
-            repository.mergeBranches("master", "origin/master");
+            return repository.mergeBranches("master", "origin/master");
         })
         .then(function () {
             var checkoutOptions = new nodegit.CheckoutOptions()
