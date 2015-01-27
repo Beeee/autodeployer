@@ -9,6 +9,7 @@
   "author": "Roar Bjurstrom",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "nodegit": "~0.2.7"
+    "nodegit": "~0.2.7",
+    "maven-deploy": "0.0.3"
   }
 }
