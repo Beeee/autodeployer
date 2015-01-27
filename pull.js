@@ -34,7 +34,9 @@ module.exports = function (callback) {
             repository.mergeBranches("master", "origin/master");
         })
         .then(function () {
-            nodegit.Checkout.head(repository);
+            var checkoutOptions = new nodegit.CheckoutOptions()
+            checkoutOptions.checkoutStrategy = 4;
+            return nodegit.Checkout.head(repository, checkoutOptions);
         })
         .done(function () {
             callback();
