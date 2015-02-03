@@ -3,6 +3,8 @@ var http = require('http');
 var pull = require('./pull');
 var mvn = require('./maven');
 var move = require('./move');
+var runjar = require('./runapplication');
+var globalprocess;
 
 function sendResults(res, status, statusText, headers, result) {
     headers.Connection = "close";
@@ -15,7 +17,9 @@ function gitPull() {
     pull(function () {
         mvn(function () {
             move(function () {
-                console.log("pull + mvn + move");
+                globalprocess = runjar(function () {
+                    console.log("pull + mvn + move+run");
+                });
             });
         });
     });
@@ -23,7 +27,17 @@ function gitPull() {
 
 function routeCall(req, res, body) {
     console.log(body);
-    gitPull();
+    if (globalprocess) {
+        globalprocess.on('close', function (code, signal) {
+            console.log('child process terminated due to receipt of signal ' + signal);
+            gitPull();
+        });
+        globalprocess.kill('SIGKILL');
+    } else {
+        gitPull();
+
+    }
+
     return sendResults(res, 200, "OK", {}, {});
 }
 
