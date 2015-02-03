@@ -1,8 +1,10 @@
-"use stict";
-var maven = require('maven-deploy');
-var config = require('./maven.json');
+"use strict";
+var spawn = require('child_process').spawn;
 
 module.exports = function (callback) {
-    maven.config(config);
-    maven.install();
+    mvn = spawn('mvn', ['clean install'], {cwd: "../situp-backend-central/"});
+
+    mvn.stdout.on('data', function (data) {
+        console.log(data);
+    });
 }
