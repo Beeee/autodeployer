@@ -1,6 +1,8 @@
 "use strict";
 var http = require('http');
 var pull = require('./pull');
+var mvn = require('./maven');
+var move = require('./move');
 
 function sendResults(res, status, statusText, headers, result) {
     headers.Connection = "close";
@@ -11,7 +13,11 @@ function sendResults(res, status, statusText, headers, result) {
 
 function gitPull() {
     pull(function () {
-        console.log("pull done");
+        mvn(function () {
+            move(function () {
+                console.log("pull + mvn + move");
+            });
+        });
     });
 }
 

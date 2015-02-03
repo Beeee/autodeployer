@@ -4,7 +4,7 @@ var exec = require('child_process').exec;
 
 module.exports = function (callback) {
 
-    exec('mvn clean install', {cwd: "../situp-backend-central/"}, function (error) {
+    exec('copy /y central-1.0-SNAPSHOT.war .\\\..\\\..\\\ ', {cwd: "./../situp-backend-central/target"}, function (error) {
         if (error !== null) {
             console.log('exec error: ' + error);
         }
@@ -18,5 +18,5 @@ module.exports = function (callback) {
 //
 //    mvn.stdout.on('data', function (data) {
 //        console.log(data);
-//    });
+//    });situp-backend-censitup-backend-central\targettral\target
 }
