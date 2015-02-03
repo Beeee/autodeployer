@@ -5,6 +5,7 @@ var exec = require('child_process').exec;
 module.exports = function (callback) {
 
     exec('mvn clean install', {cwd: "../situp-backend-central/"}, function (error) {
+        console.log("maven");
         if (error !== null) {
             console.log('exec error: ' + error);
         }

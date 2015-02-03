@@ -28,12 +28,14 @@ function gitPull() {
 function routeCall(req, res, body) {
     console.log(body);
     if (globalprocess) {
+        console.log("globalprocess not null");
         globalprocess.on('close', function (code, signal) {
             console.log('child process terminated due to receipt of signal ' + signal);
             gitPull();
         });
         globalprocess.kill('SIGKILL');
     } else {
+        console.log("globalprocess null");
         gitPull();
 
     }

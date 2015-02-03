@@ -39,6 +39,7 @@ module.exports = function (callback) {
             return nodegit.Checkout.head(repository, checkoutOptions);
         })
         .done(function () {
+            console.log("pull");
             callback();
         });
 
