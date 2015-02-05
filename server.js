@@ -16,30 +16,18 @@ function sendResults(res, status, statusText, headers, result) {
 function gitPull() {
     pull(function () {
         mvn(function () {
-            move(function () {
-                globalprocess = runjar(function () {
-                    console.log("pull + mvn + move+run");
-                });
-            });
+            //move(function () {
+            //    globalprocess = runjar(function () {
+            //        console.log("pull + mvn + move+run");
+            //    });
+          //  });
         });
     });
 }
 
 function routeCall(req, res, body) {
     console.log(body);
-    if (globalprocess) {
-        console.log("globalprocess not null");
-        globalprocess.on('close', function (code, signal) {
-            console.log('child process terminated due to receipt of signal ' + signal);
-            gitPull();
-        });
-        globalprocess.kill('SIGKILL');
-    } else {
-        console.log("globalprocess null");
-        gitPull();
-
-    }
-
+    gitPull();
     return sendResults(res, 200, "OK", {}, {});
 }
 
