@@ -1,16 +1,37 @@
 "use strict";
 var spawn = require('child_process').spawn;
-var globaljava;
+var config = require("./config");
+var globaljava = null;
+var killCallback;
 
-module.exports = function (callback) {
 
-    globaljava = spawn('java', ['-jar central-1.0-SNAPSHOT.jar'], {cwd: "../situp-backend-central/target/"});
+exports.startServer = function () {
+    globaljava = spawn('java', ['-jar', config.jarname], {cwd: config.runningfolder});
 
     globaljava.stdout.on('data', function (data) {
-        console.log(data);
+        console.log(data.toString());
     });
 
     globaljava.on('close', function (code, signal) {
-        callback();
+        console.log('child process terminated due to receipt of signal ' + signal);
+        globaljava = null;
+        if (killCallback) {
+            killCallback();
+        }
     });
 }
+
+exports.isRunning = function() {
+    return globaljava != null;
+
+}
+
+exports.killServer = function(callback) {
+        killCallback=callback;
+        globaljava.kill();
+}
+
+
+
+
+

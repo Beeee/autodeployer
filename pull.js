@@ -1,10 +1,11 @@
 "use strict";
 var nodegit = require("nodegit");
 var path = require("path");
+var config = require("./config");
 
-var repoDir = "../situp-backend-central/";
-var sshPublicKey = path.resolve("./id_rsa.pub");
-var sshPrivateKey = path.resolve("./id_rsa");
+var repoDir = config.repoDir;
+var sshPublicKey = path.resolve(config.sshPublicKey);
+var sshPrivateKey = path.resolve(config.sshPrivateKey);
 
 var repository;
 
@@ -16,7 +17,6 @@ function createCred() {
         ""
     );
 }
-
 
 module.exports = function (callback) {
 // Open a repository that needs to be fetched and fast-forwarded
@@ -39,7 +39,7 @@ module.exports = function (callback) {
             return nodegit.Checkout.head(repository, checkoutOptions);
         })
         .done(function () {
-            console.log("pull");
+            console.log("pull complete");
             callback();
         });
 

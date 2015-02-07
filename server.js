@@ -3,8 +3,7 @@ var http = require('http');
 var pull = require('./pull');
 var mvn = require('./maven');
 var move = require('./move');
-var runjar = require('./runapplication');
-var globalprocess;
+var applicatonStarter = require('./runapplication');
 
 function sendResults(res, status, statusText, headers, result) {
     headers.Connection = "close";
@@ -13,21 +12,24 @@ function sendResults(res, status, statusText, headers, result) {
     res.end(JSON.stringify(result));
 }
 
-function gitPull() {
+function gitPullBuildMoveStart() {
     pull(function () {
         mvn(function () {
-            //move(function () {
-            //    globalprocess = runjar(function () {
-            //        console.log("pull + mvn + move+run");
-            //    });
-          //  });
+            move(function () {
+                applicatonStarter.startServer();
+            });
         });
     });
 }
 
 function routeCall(req, res, body) {
-    console.log(body);
-    gitPull();
+    if (applicatonStarter.isRunning()) {
+        applicatonStarter.killServer(function () {
+            gitPullBuildMoveStart();
+        });
+    } else {
+        gitPullBuildMoveStart();
+    }
     return sendResults(res, 200, "OK", {}, {});
 }
 
@@ -39,7 +41,6 @@ function methodNotAllowed(res) {
 }
 
 http.createServer(function (req, res) {
-    console.log("Request recevied");
     if (req.method === "POST") {
         var body = "";
         req.on("data", function (data) {
@@ -50,6 +51,7 @@ http.createServer(function (req, res) {
             return routeCall(req, res, body);
         });
     } else {
+        console.log("methodNotallowed");
         methodNotAllowed(res);
     }
 }).listen(9083);
